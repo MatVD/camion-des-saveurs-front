@@ -3,7 +3,7 @@ import { getUserById } from "../../utils/userUtils/getUserById";
 import "@testing-library/jest-dom";
 
 // Mocking the fetch API
-global.fetch = jest.fn();   
+global.fetch = jest.fn();
 
 describe("getUserById", () => {
   const userId = "12345";
@@ -11,6 +11,15 @@ describe("getUserById", () => {
 
   beforeEach(() => {
     (fetch as jest.Mock).mockClear();
+  });
+
+  // Silence console.error during tests
+  beforeAll(() => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  afterAll(() => {
+    (console.error as jest.Mock).mockRestore();
   });
 
   it("should fetch user data by ID", async () => {
@@ -30,7 +39,9 @@ describe("getUserById", () => {
       statusText: "Not Found",
     });
 
-    await expect(getUserById(userId)).rejects.toThrow("Network response was not ok");
+    await expect(getUserById(userId)).rejects.toThrow(
+      "Network response was not ok"
+    );
   });
 
   it("should handle fetch errors", async () => {
