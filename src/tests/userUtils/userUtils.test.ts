@@ -84,7 +84,8 @@ describe("User Utils", () => {
       const displayName = `${userWithEmptyName.firstName} ${userWithEmptyName.lastName}`.trim();
       
       expect(displayName).toBe("Doe");
-      expect(displayName).not.toContain(userWithEmptyName.firstName);
+      expect(displayName).not.toContain(" "); // Check for no extra spaces
+      expect(displayName.length).toBe(3); // "Doe" has 3 characters
     });
   });
 
